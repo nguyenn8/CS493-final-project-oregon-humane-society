@@ -1,0 +1,29 @@
+{
+  "name": "ohs-api",
+  "version": "1.0.0",
+  "description": "mock api for the oregon humane society",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "NODE_ENV=development nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osu-cs493-sp21/final-project-oregon-humane-society.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/osu-cs493-sp21/final-project-oregon-humane-society/issues"
+  },
+  "homepage": "https://github.com/osu-cs493-sp21/final-project-oregon-humane-society#readme",
+  "dependencies": {
+    "apollo-server-express": "^2.24.0",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "graphql": "^15.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7"
+  }
+}
