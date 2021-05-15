@@ -10,37 +10,37 @@ Here's an overview of the routes offered in this API.
 
 ### Employees
 
-- GET /employees - get list of all employees if admin
-- POST /employees - post to create new employee account if admin
-- GET /employees/:id - if employee is authenticated, get information about their employee profile
-- POST /employees/login - login as an employee
-- GET /employees/:id/services - get list of services that this particular employee is capable of handling
-- DELETE /employees/:id - delete a particular employee from the database
+- `GET /employees` - get list of all employees if admin
+- `POST /employees` - post to create new employee account if admin
+- `GET /employees/:id` - if employee is authenticated, get information about their employee profile
+- `POST /employees/login` - login as an employee
+- `GET /employees/:id/services` - get list of services that this particular employee is capable of handling
+- `DELETE /employees/:id` - delete a particular employee from the database
 
 ### Animals
 
-- GET /animals - get list of all available animals
-- POST /animals - create a new adoptable animal if authenticated employee
-- GET /animals/:id - fetch details about a particular animal
-- PUT /animals/:id - update details about a particular animal
-- GET /animals/:breed - fetch all animals from a particular breed
-- DELETE /animals/:id - delete a particular animal from shelter listing if they have been adopted
+- `GET /animals` - get list of all available animals
+- `POST /animals` - create a new adoptable animal if authenticated employee
+- `GET /animals/:id` - fetch details about a particular animal
+- `PUT /animals/:id` - update details about a particular animal
+- `GET /animals/:breed` - fetch all animals from a particular breed
+- `DELETE /animals/:id` - delete a particular animal from shelter listing if they have been adopted
 
 ### Locations
 
-- GET /locations - get information about all locations,
-- POST /locations - add a new location if administrator
-- PUT /locations/:id - update information about a specific location if administrator
-- GET /locations/:id - get specific information about a location, including adoptable animals in this location
-- DELETE /locations/:id - delete a location from the shelter database
+- `GET /locations` - get information about all locations,
+- `POST /locations` - add a new location if administrator
+- `PUT /locations/:id` - update information about a specific location if administrator
+- `GET /locations/:id` - get specific information about a location, including adoptable animals in this location
+- `DELETE /locations/:id` - delete a location from the shelter database
 
 ### Services
 
-- GET /services - get information about all services
-- POST /services - add a new employee for a service if administrator
-- GET/services/:service_name - get information about all offerings of a particular service
-- PUT /services/:id - update a specific service offering if administrator
-- DELETE /services/:id - delete an offered service from the database
+- `GET /services` - get information about all services
+- `POST /services` - add a new employee for a service if administrator
+- `GET/services/:service_name` - get information about all offerings of a particular service
+- `PUT /services/:id` - update a specific service offering if administrator
+- `DELETE /services/:id` - delete an offered service from the database
 
 ## Building the API
 
