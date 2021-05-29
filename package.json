@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/osu-cs493-sp21/final-project-oregon-humane-society#readme",
   "dependencies": {
-    "apollo-server-express": "^2.24.0",
+    "apollo-datasource-mongodb": "^0.4.1",
+    "apollo-server-express": "^2.25.0",
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "graphql": "^15.5.0",
