@@ -1,13 +1,17 @@
 const router = require("express").Router();
 const { DataSource } = require("apollo-datasource");
+const { getDbReference } = require("../lib/mongo");
+
 class LocationAPI extends DataSource {
-  constructor({ dbRef }) {
+  constructor() {
     super();
-    this.db = dbRef;
+    this.db = getDbReference();
   }
 
-  getAllLocations() {
-    return this.data;
+  async getAllLocations() {
+    const collection = this.db.collection('locations');
+    const results = await collection.find({}).toArray();
+    return results;
   }
 
   getLocationById({ locationId }) {

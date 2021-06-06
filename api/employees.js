@@ -1,13 +1,17 @@
 const router = require("express").Router();
 const { DataSource } = require("apollo-datasource");
+const { getDbReference } = require("../lib/mongo");
+
 class EmployeesAPI extends DataSource {
-  constructor({ dbRef }) {
+  constructor() {
     super();
-    this.db = dbRef;
+    this.db = getDbReference();
   }
 
-  getAllEmployees() {
-    return this.data;
+  async getAllEmployees() {
+    const collection = this.db.collection('employees');
+    const results = await collection.find({}).toArray();
+    return results;
   }
 
   getEmployeeById({ employeeId }) {

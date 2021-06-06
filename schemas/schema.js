@@ -14,7 +14,7 @@ module.exports = gql`
   }
 
   type Employee {
-    id: ID!
+    _id: ID!
     username: String!
     password: String!
     date_hired: Int!
@@ -23,7 +23,7 @@ module.exports = gql`
   }
 
   type Service {
-    id: ID!
+    _id: ID!
     name: String!
     desc: String!
     fee: Int!
@@ -31,7 +31,7 @@ module.exports = gql`
   }
 
   type Location {
-    id: ID!
+    _id: ID!
     name: String!
     desc: String!
     population: Int!
@@ -40,6 +40,9 @@ module.exports = gql`
 
   type Query {
     animals: [Animal]!
+    employees: [Employee]!
+    locations: [Location]!
+    services: [Service]!
     animal(id: ID!): Animal
   }
 `;
