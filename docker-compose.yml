@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 services:
   api:
     build: .
@@ -7,7 +7,7 @@ services:
     ports:
       - 8000:8000
     environment:
-      MONGO_DB_NAME: ${MONGO_DB_NAME}
+      MONGO_DATABASE: ${MONGO_DATABASE}
       MONGO_USER: ${MONGO_USER}
       MONGO_PASSWORD: ${MONGO_PASSWORD}
       MONGO_HOST: mongodb
@@ -17,14 +17,14 @@ services:
     image: mongo:latest
     restart: always
     volumes:
-      - mongodb-data:/data/db
+      - mongo-data:/data/db
       - ./db-init/:/docker-entrypoint-initdb.d
     environment:
-      MONGO_DATABASE: ${MONGO_DB_NAME}
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
       MONGO_USER: ${MONGO_USER}
       MONGO_PASSWORD: ${MONGO_PASSWORD}
 
 volumes:
-  mongodb-data:
+  mongo-data:
