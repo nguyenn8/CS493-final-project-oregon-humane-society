@@ -4,6 +4,7 @@ const { ApolloServer } = require("apollo-server-express");
 
 const typeDefs = require("./schemas/schema");
 
+const { connectToDb } = require('./lib/mongo');
 const api = require("./api");
 
 const app = express();
@@ -30,6 +31,8 @@ app.use("*", function (req, res, next) {
   });
 });
 
-app.listen(port, function () {
-  console.log("== Server is running on port", port);
+connectToDb(async () => {
+  app.listen(port, function () {
+    console.log("== Server is running on port", port);
+  });
 });
