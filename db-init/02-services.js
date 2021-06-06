@@ -1,4 +1,4 @@
-db.service.insertMany([
+db.services.insertMany([
   {
     "name": "pet grooming",
     "desc": "Professional groomers will provide baths, haircuts, and nail trims for all pets",

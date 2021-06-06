@@ -1,4 +1,4 @@
-db.employee.insertMany([
+db.employees.insertMany([
   {
     "username": "ash",
     "password": "pikachu",

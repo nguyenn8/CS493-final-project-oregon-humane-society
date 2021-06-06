@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const { DataSource } = require("apollo-datasource");
 class LocationAPI extends DataSource {
-  constructor({ data }) {
+  constructor({ dbRef }) {
     super();
-    this.data = data;
+    this.db = dbRef;
   }
 
   getAllLocations() {

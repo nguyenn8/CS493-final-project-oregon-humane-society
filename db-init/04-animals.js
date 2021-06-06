@@ -1,4 +1,4 @@
-db.animal.insertMany([
+db.animals.insertMany([
   {
     "name": "Charmander",
     "desc": "A medium size cat with heavy ruff fur around their necks and silky long hair",

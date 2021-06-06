@@ -1,4 +1,4 @@
-db.location.insertMany([
+db.locations.insertMany([
   {
     "name": "Corvallis",
     "desc": "1563 NW Monroe Ave.",

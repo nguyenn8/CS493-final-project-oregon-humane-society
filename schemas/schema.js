@@ -2,7 +2,7 @@ const { gql } = require("apollo-server-express");
 
 module.exports = gql`
   type Animal {
-    id: ID!
+    _id: ID!
     name: String!
     desc: String!
     date_available: Int!

@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const { DataSource } = require("apollo-datasource");
 class ServicesAPI extends DataSource {
-  constructor({ data }) {
+  constructor({ dbRef }) {
     super();
-    this.data = data;
+    this.db = dbRef;
   }
 
   getAllServices() {
