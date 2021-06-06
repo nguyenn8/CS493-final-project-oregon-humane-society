@@ -21,7 +21,6 @@ class AnimalsAPI extends DataSource {
     const results = await collection.find({ _id: ObjectId(animalId) }).toArray();
     console.log(results);
     return results[0];
-    //return this.data.find((animal) => animal.id === animalId);
   }
 
   getAnimalsByLocationId({ locationId }) {

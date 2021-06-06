@@ -44,5 +44,8 @@ module.exports = gql`
     locations: [Location]!
     services: [Service]!
     animal(id: ID!): Animal
+    employee(id: ID!): Employee
+    location(id: ID!): Location
+    service(id: ID!): Service
   }
 `;
