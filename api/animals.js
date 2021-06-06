@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { DataSource } = require("apollo-datasource");
 const { getDbReference } = require("../lib/mongo");
+const { ObjectId } = require("mongodb");
 
 class AnimalsAPI extends DataSource {
   constructor() {
@@ -15,8 +16,13 @@ class AnimalsAPI extends DataSource {
 		return results;
   }
 
-  getAnimalById({ animalId }) {
-    return this.data.find((animal) => animal.id === animalId);
+  async getAnimalById({ animalId }) {
+    console.log(animalId);
+    const collection = this.db.collection('animals');
+    const results = await collection.find({ _id: ObjectId(animalId) }).toArray();
+    console.log(results);
+    return results[0];
+    //return this.data.find((animal) => animal.id === animalId);
   }
 
   getAnimalsByLocationId({ locationId }) {
