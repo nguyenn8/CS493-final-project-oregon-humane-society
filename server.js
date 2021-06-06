@@ -41,9 +41,9 @@ connectToDb(async () => {
 		resolvers,
 		dataSources: () => ({
 			animalsAPI: new AnimalsAPI(),
-			employeesAPI: new EmployeesAPI({ db }),
-			locationsAPI: new LocationsAPI({ db }),
-			servicesAPI: new ServicesAPI({ db })
+			employeesAPI: new EmployeesAPI(),
+			locationsAPI: new LocationsAPI(),
+			servicesAPI: new ServicesAPI()
 		})
 	});
 	server.applyMiddleware({ app });

@@ -11,8 +11,7 @@ class AnimalsAPI extends DataSource {
   async getAllAnimals() {
     const collection = this.db.collection('animals');
     const results = await collection.find({}).toArray();
-    console.log(results)
-		return results;
+    return results;
   }
 
   getAnimalById({ animalId }) {
