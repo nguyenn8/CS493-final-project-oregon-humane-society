@@ -8,7 +8,8 @@ const { insertNewEmployee } = require("../models/employee");
 const {
   EmployeeSchema,
   getEmployeesPage,
-  getEmployeeById
+  getEmployeeById,
+	deleteEmployee
 } = require("../models/employee");
 
 
@@ -97,5 +98,27 @@ router.post("/login", async (req, res, next) => {
     });
   }
 });
+
+/*
+ * Endpoint to delete an existing employee.
+ */
+router.delete("/:id", async (req, res) => {
+	try {
+		const success = await deleteEmployee(req.params.id);
+		if (success) {
+			res.status(204).end();
+		} else {
+			res.status(404).send({
+				error: "Cannot delete an animal that does not exist."
+			})
+		}
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({
+			error: "Unable to delete animal. Please try again later."
+		});
+	}
+});
+
 
 module.exports = router;

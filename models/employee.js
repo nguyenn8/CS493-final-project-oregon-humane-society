@@ -3,6 +3,7 @@
  */
 
 const bcrypt = require("bcryptjs");
+const { ObjectId } = require("mongodb");
 
 const { extractValidFields } = require("../lib/validation");
 const { getDbReference } = require("../lib/mongo");
@@ -21,7 +22,7 @@ exports.EmployeeSchema = EmployeeSchema;
 
 async function getEmployeesPage(page) {
   const db = getDbReference();
-  const collection = db.collection('locations');
+  const collection = db.collection('employees');
 
   const count = await collection.countDocuments();
   const pageSize = 10;
@@ -130,4 +131,20 @@ exports.addNewEmployee = async function () {
 
 exports.getEmployeeServicesById = async function (employeeId) {};
 
-exports.deleteEmployee = async function () {};
+/*
+ * Delete an animal in the DB by ID.
+ */
+exports.deleteEmployee = async function (id) {
+	const db = getDbReference();
+	const collection = db.collection("employees");
+	if (!ObjectId.isValid(id)) {
+		return null;
+	}
+	const exists = await collection.find({ _id: new ObjectId(id) }).limit(1).count(true);
+	if (!exists) {
+		return null;
+	}
+	await collection.deleteOne({ _id: new ObjectId(id) })
+	return {};
+}
+
