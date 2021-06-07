@@ -66,4 +66,4 @@ async function getServiceByLocationId(id) {
     return results;
   }
 }
-exports.getLocationByBusinessId = getLocationByBusinessId;
+exports.getServiceByLocationId = getServiceByLocationId;
