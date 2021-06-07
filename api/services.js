@@ -1,12 +1,12 @@
 const router = require("express").Router();
-const { DataSource } = require("apollo-datasource");
-const { getDbReference } = require("../lib/mongo");
+const { validateAgainstSchema} = require("../lib/validation");
 const { ObjectId } = require("mongodb");
 const { insertNewService,
         ServiceSchema,
-        getServiceByName,
-        getServices,
-        deleteService
+        getServiceById,
+        getServicesPage,
+        deleteService,
+				putService
       } = require ("../models/service");
 
 /*
@@ -20,7 +20,6 @@ router.post('/', async (req, res) => {
         id: id,
         links: {
           service: `/services/${id}`,
-          location:  `/locations/${locationid}`
         }
       });
     } catch (err) {
@@ -42,7 +41,7 @@ router.post('/', async (req, res) => {
  */
  router.get("/", async (req, res) => {
  	try {
- 		const servicePage = await getServices(parseInt(req.query.page) || 1);
+ 		const servicePage = await getServicesPage(parseInt(req.query.page) || 1);
  		servicePage.links = {};
  		if (servicePage.page < servicePage.totalPages) {
  			servicePage.links.nextPage = `/services?page=${servicePage.page + 1}`;
@@ -62,11 +61,11 @@ router.post('/', async (req, res) => {
  });
 
 /*
- * Route to fetch info about a specific service by name.
+ * Route to fetch info about a specific service by ID.
  */
-router.get('/:name', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
-    const service = await getServiceById(req.params.name);
+    const service = await getServiceById(req.params.id);
     if (service) {
       res.status(200).send(service);
     } else {
@@ -85,8 +84,8 @@ router.get('/:name', async (req, res, next) => {
  */
 router.put('/:id', async (req, res, next) => {
   try{
-    const service = await putServices(parseInt(req.params.id), req.body);
-    res.status(200).send(service);
+    await putService(req.params.id, req.body);
+    res.status(204).end();
   }catch(err){
     console.error("--Error:", err);
     res.status(500).send({
@@ -94,20 +93,20 @@ router.put('/:id', async (req, res, next) => {
   })
  }
 });
+
 /*
  * Route to delete a service.
  */
 router.delete('/:id', async (req, res, next) =>{
-  const id = parseInt(req.params.photoid);
   try {
-    console.log("== photoid: ",id);
-    const id = await deletePhoto(id);
-    res.status(204).send(id)
+    const id = await deleteService(req.params.id);
+    res.status(204).end();
   } catch(err){
-      console.error("--Error:", err);
+      console.error(err);
       res.status(500).send({
         err: "Error deleting service from DB. Try again later."
       })
     }
+});
 
 module.exports = router;

@@ -2,15 +2,14 @@
  * Service schema and associated methods.
  */
  const { ObjectId } = require('mongodb');
- const { getDBReference } = require('../lib/mongo');
+ const { getDbReference } = require('../lib/mongo');
 const  { extractValidFields } = require('../lib/validation')
 
 const ServiceSchema = {
-  id: { required: true },
   name: { required: true },
   desc: { required: true },
   fee: { required: true },
-  location_id: { required: true }
+  location: { required: true }
 };
 exports.ServiceSchema = ServiceSchema;
 
@@ -18,9 +17,9 @@ exports.ServiceSchema = ServiceSchema;
  * Executes a DB query to insert a new service into the database.  Returns
  * a Promise that resolves to the ID of the newly-created service entry.
  */
-async function insertNewService(photo) {
-  location.locationid = ObjectId(location.locationid);
-  const db = getDBReference();
+async function insertNewService(service) {
+  service = extractValidFields(service, ServiceSchema);
+	const db = getDbReference();
   const collection = db.collection('services');
   const result = await collection.insertOne(service);
   return result.insertedId;
@@ -43,7 +42,7 @@ exports.insertNewService = insertNewService;
  	page = page < 1 ? 1 : page;
  	const offset = (page - 1) * pageSize;
 
- 	const results = collection
+ 	const results = await collection
  		.find({})
  		.sort({ _id: 1 })
  		.skip(offset)
@@ -65,19 +64,19 @@ exports.insertNewService = insertNewService;
  * service.  If no service with the specified name exists, the returned Promise
  * will resolve to null.
  */
-async function getServiceByName(name) {
-  const db = getDBReference();
+async function getServiceById(id) {
+  const db = getDbReference();
   const collection = db.collection('services');
-  if (!ObjectId.isValid(name)) {
-    return [];
+  if (!ObjectId.isValid(id)) {
+    return null;
   } else {
     const results = await collection
-      .find({ name: new ObjectId(name) })
+      .find({ _id: new ObjectId(id) })
       .toArray();
-    return results;
+    return results[0];
   }
 }
-exports.getServiceByName = getServiceByName;
+exports.getServiceById = getServiceById;
 /*
  * Executes a DB query to update a single specified service based on its id.
  * Returns a Promise that resolves to an object containing the updated
@@ -85,15 +84,14 @@ exports.getServiceByName = getServiceByName;
  * will resolve to null.
  */
 async function putService(id, service) {
-  const db = getDbReference();
-  const collection = db.collection('service');
+  service = extractValidFields(service, ServiceSchema);
+	const db = getDbReference();
+  const collection = db.collection('services');
   const results = await collection.replaceOne(
-    {id: id},
+    { _id: new ObjectId(id) },
     service
   );
-    return{
-      service: results,
-    };
+  return {};
 }
 exports.putService = putService;
 
@@ -106,9 +104,7 @@ exports.putService = putService;
 async function deleteService(id) {
   const db = getDbReference();
   const collection = db.collection('services');
-  const results = await collection.deleteOne({id: id});
-    return{
-      id: results,
-    };
+  const results = await collection.deleteOne({ _id: new ObjectId(id) });
+  return {};
 }
 exports.deleteService = deleteService;
