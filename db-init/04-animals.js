@@ -8,7 +8,6 @@ db.animals.insertMany([
     "breed": "Birman",
     "sex": "Female",
     "location_id": "1"
-
   },
  {
     "name": "Bulbasaur",
