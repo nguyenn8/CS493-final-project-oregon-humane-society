@@ -4,19 +4,19 @@ const { ObjectId } = require("mongodb");
 
 const { validateUser } = require("../lib/validation");
 const { insertNewEmployee } = require("../models/employee");
-
+const { generateAuthToken, requireAuthentication } = require("../lib/auth");
 const {
   EmployeeSchema,
   getEmployeesPage,
   getEmployeeById,
-	deleteEmployee
+  deleteEmployee,
+  getEmployeeServicesById,
 } = require("../models/employee");
-
 
 /*
  * Route to get information about all employees.
  */
- router.get('/', async (req, res) => {
+router.get("/", requireAuthentication, async (req, res) => {
   try {
     const employeesPage = await getEmployeesPage(parseInt(req.query.page) || 1);
     console.log("---locationsPage", employeesPage);
@@ -24,10 +24,14 @@ const {
   } catch (err) {
     console.error("  -- error:", err);
     res.status(500).send({
-      err: "Error fetching employees page from DB.  Try again later."
+      err: "Error fetching employees page from DB.  Try again later.",
     });
   }
 });
+
+/*
+ * Route to create a new employee.
+ */
 
 router.post("/", async (req, res, next) => {
   if (validateAgainstSchema(req.body, UserSchema)) {
@@ -49,11 +53,10 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-
 /*
-* Route to fetch info about a specific location including adoptable animals in this location
-*/
-router.get('/:id', async (req, res, next) => {
+ * Route to fetch info about a specific employee
+ */
+router.get("/:id", requireAuthentication, async (req, res, next) => {
   try {
     const employee = await getEmployeeById(req.params.id);
     if (employee) {
@@ -64,7 +67,27 @@ router.get('/:id', async (req, res, next) => {
   } catch (err) {
     console.error(err);
     res.status(500).send({
-      error: "Unable to fetch employee.  Please try again later."
+      error: "Unable to fetch employee.  Please try again later.",
+    });
+  }
+});
+
+/*
+ * Route to fetch info about a specific employee's services that are offered
+ */
+
+router.get("/:id/services", async (req, res, next) => {
+  try {
+    const services = await getEmployeeServicesById(req.params.id);
+    if (services) {
+      res.status(200).send(services);
+    } else {
+      next();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      error: "Unable to fetch employee services.  Please try again later.",
     });
   }
 });
@@ -102,23 +125,22 @@ router.post("/login", async (req, res, next) => {
 /*
  * Endpoint to delete an existing employee.
  */
-router.delete("/:id", async (req, res) => {
-	try {
-		const success = await deleteEmployee(req.params.id);
-		if (success) {
-			res.status(204).end();
-		} else {
-			res.status(404).send({
-				error: "Cannot delete an animal that does not exist."
-			})
-		}
-	} catch (err) {
-		console.error(err);
-		res.status(500).send({
-			error: "Unable to delete animal. Please try again later."
-		});
-	}
+router.delete("/:id", requireAuthentication, async (req, res) => {
+  try {
+    const success = await deleteEmployee(req.params.id);
+    if (success) {
+      res.status(204).end();
+    } else {
+      res.status(404).send({
+        error: "Cannot delete an employee that does not exist.",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      error: "Unable to delete employee. Please try again later.",
+    });
+  }
 });
-
 
 module.exports = router;
