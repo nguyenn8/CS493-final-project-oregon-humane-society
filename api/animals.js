@@ -6,8 +6,8 @@ const { AnimalSchema } = require("../models/animal");
 
 class AnimalsAPI extends DataSource {
   constructor() {
-
-
+    super();
+    this.db = getDbReference();
   }
 
   async getAllAnimals() {
