@@ -7,7 +7,7 @@ db.animals.insertMany([
     "age": "3",
     "breed": "Birman",
     "sex": "Female",
-    "location_id": "1"
+    "location": "Corvallis"
   },
  {
     "name": "Bulbasaur",
@@ -15,28 +15,28 @@ db.animals.insertMany([
     "date_available": "3/4/2021",
     "weight": "18lb",
     "age": "1",
-    "breed": "bulldog",
+    "breed": "Bulldog",
     "sex": "male",
-    "location_id": "2"
+    "location": "Portland"
  },
  {
-    "name": "snorlax",
+    "name": "Snorlax",
     "desc": "A medium sized active dog with a somewhat stubborn temperament",
     "date_available": "5/20/2021",
     "weight": "77lb",
     "age": "1",
     "breed": "Rottweiler",
     "sex": "female",
-    "location_id": "3"
+    "location": "Corvallis"
  },
  {
-    "name": "squirtle",
+    "name": "Squirtle",
     "desc": "An average size cat with a diet restriction, avoid giving solid food",
     "date_available": "6/1/2021",
     "weight": "8lb",
     "age": "4",
     "breed": "Ragdoll",
     "sex": "male",
-    "location_id": "4"
+    "location": "Corvallis"
  }
 ])
