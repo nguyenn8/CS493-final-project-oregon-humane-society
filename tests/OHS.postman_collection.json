@@ -1,0 +1,210 @@
+{
+	"info": {
+		"_postman_id": "82518f5d-bae5-4335-9cac-d05b934cb6db",
+		"name": "OHS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Animals",
+			"item": [
+				{
+					"name": "Get variants",
+					"item": [
+						{
+							"name": "Get all animals.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/animals",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"animals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get animal by ID.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/animals/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"animals",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "60bd9ab0944388012a07cec2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get animal by breed.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/animals/breed/:breed",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"animals",
+										"breed",
+										":breed"
+									],
+									"variable": [
+										{
+											"key": "breed",
+											"value": "Bulldog"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get animal by location.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/animals/location/:location",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"animals",
+										"location",
+										":location"
+									],
+									"variable": [
+										{
+											"key": "location",
+											"value": "Corvallis"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Other requests",
+					"item": [
+						{
+							"name": "Create new animal.",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Mike\",\n    \"desc\": \"He's a dog. Wow.\",\n    \"date_available\": \"07/01/21\",\n    \"weight\": \"15\",\n    \"breed\": \"Bulldog\",\n    \"sex\": \"Male\",\n    \"location\": \"Corvallis\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/animals",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"animals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update animal by ID.",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Mike\",\n    \"desc\": \"description\",\n    \"date_available\": \"07/01/21\",\n    \"weight\": \"40lbs\",\n    \"breed\": \"Bulldog\",\n    \"sex\": \"M\",\n    \"location\": \"Corvallis\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/animals/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"animals",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "60bda8cfc0f7f200139e3a41"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete animal by ID.",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/animals/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"animals",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "60bda8cfc0f7f200139e3a41"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Employees",
+			"item": []
+		},
+		{
+			"name": "Locations",
+			"item": []
+		},
+		{
+			"name": "Services",
+			"item": []
+		}
+	]
+}
