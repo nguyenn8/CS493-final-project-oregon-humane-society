@@ -23,7 +23,8 @@ Here's an overview of the routes offered in this API.
 - `POST /animals` - create a new adoptable animal if authenticated employee
 - `GET /animals/:id` - fetch details about a particular animal
 - `PUT /animals/:id` - update details about a particular animal
-- `GET /animals/:breed` - fetch all animals from a particular breed
+- `GET /animals/breed/:breed` - fetch all animals from a particular breed
+- `GET /animals/location/:location` - fetch all animals from a particular location
 - `DELETE /animals/:id` - delete a particular animal from shelter listing if they have been adopted
 
 ### Locations
