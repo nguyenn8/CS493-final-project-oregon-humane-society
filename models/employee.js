@@ -2,14 +2,10 @@
  * Employee schema and associated methods.
  */
 
-const mysqlPool = require("../lib/mysqlPool");
 const bcrypt = require("bcryptjs");
 
 const { extractValidFields } = require("../lib/validation");
 const { getDbReference } = require("../lib/mongo");
-
-const db = getDbReference();
-const collection = db.collection("employees");
 
 /*
  * Schema for an employee.
@@ -27,6 +23,8 @@ exports.EmployeeSchema = EmployeeSchema;
  * Insert a new employee into the DB.
  */
 exports.insertNewEmployee = async function (user) {
+	const db = getDbReference();
+	const collection = db.collection("employees");
   const userToInsert = extractValidFields(user, UserSchema);
   console.log("  -- userToInsert before hashing:", userToInsert);
   userToInsert.password = await bcrypt.hash(userToInsert.password, 8);
@@ -39,7 +37,9 @@ exports.insertNewEmployee = async function (user) {
  * Fetch an employee from the DB based on employee ID.
  */
 async function getEmployeeById(id, includePassword) {
-  let results;
+  const db = getDbReference();
+	const collection = db.collection("employees");
+	let results;
   if (includePassword) {
     [results] = await mysqlPool.query("SELECT * FROM users WHERE id = ?", id);
   } else {
@@ -51,9 +51,11 @@ async function getEmployeeById(id, includePassword) {
   return results[0];
 }
 
-exports.getUserById = getUserById;
+//exports.getUserById = getUserById;
 
 exports.validateEmployee = async function (id, password) {
+	const db = getDbReference();
+	const collection = db.collection("employees");
   console.log(id, password);
   const employee = await getUserById(id, true);
   console.log(employee);
@@ -61,14 +63,15 @@ exports.validateEmployee = async function (id, password) {
 };
 
 exports.getAllEmployees = async function () {
+  const db = getDbReference();
   const collection = db.collection("employees");
   const results = await collection.find({}).toArray();
   return results;
 };
 
 exports.getEmployeeById = async function (employeeId) {
-  console.log(employeeId);
-  const collection = this.db.collection("employees");
+  const db = getDbReference();
+  const collection = db.collection("employees");
   const results = await collection
     .find({ _id: ObjectId(employeeId) })
     .toArray();
@@ -77,8 +80,9 @@ exports.getEmployeeById = async function (employeeId) {
 };
 
 exports.addNewEmployee = async function () {
+  const db = getDbReference();
+  const collection = db.collection("employees");
   employee = extractValidFields(employee, EmployeeSchema);
-  const collection = this.db.collection("employees");
   const result = await collection.insertOne(employee);
   return result.insertedId;
 };
