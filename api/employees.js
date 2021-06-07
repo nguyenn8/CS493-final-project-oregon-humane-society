@@ -1,9 +1,32 @@
 const router = require("express").Router();
 const { getDbReference } = require("../lib/mongo");
 const { ObjectId } = require("mongodb");
-const { EmployeeSchema } = require("../models/employee");
+
 const { validateUser } = require("../lib/validation");
 const { insertNewEmployee } = require("../models/employee");
+
+const {
+  EmployeeSchema,
+  getEmployeesPage,
+  getEmployeeById
+} = require("../models/employee");
+
+
+/*
+ * Route to get information about all employees.
+ */
+ router.get('/', async (req, res) => {
+  try {
+    const employeesPage = await getEmployeesPage(parseInt(req.query.page) || 1);
+    console.log("---locationsPage", employeesPage);
+    res.status(200).send(employeesPage);
+  } catch (err) {
+    console.error("  -- error:", err);
+    res.status(500).send({
+      err: "Error fetching employees page from DB.  Try again later."
+    });
+  }
+});
 
 router.post("/", async (req, res, next) => {
   if (validateAgainstSchema(req.body, UserSchema)) {
@@ -21,6 +44,26 @@ router.post("/", async (req, res, next) => {
   } else {
     res.status(400).send({
       error: "Request body does not contain a valid User.",
+    });
+  }
+});
+
+
+/*
+* Route to fetch info about a specific location including adoptable animals in this location
+*/
+router.get('/:id', async (req, res, next) => {
+  try {
+    const employee = await getEmployeeById(req.params.id);
+    if (employee) {
+      res.status(200).send(employee);
+    } else {
+      next();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      error: "Unable to fetch employee.  Please try again later."
     });
   }
 });
