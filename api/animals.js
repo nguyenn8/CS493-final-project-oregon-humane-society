@@ -1,67 +1,52 @@
 const router = require("express").Router();
-const { DataSource } = require("apollo-datasource");
 const { getDbReference } = require("../lib/mongo");
 const { ObjectId } = require("mongodb");
-const { AnimalSchema } = require("../models/animal");
-
-class AnimalsAPI extends DataSource {
-  constructor() {
-    super();
-    this.db = getDbReference();
-  }
-
-  async getAllAnimals() {
-    const collection = this.db.collection("animals");
-    const results = await collection.find({}).toArray();
-    return results;
-  }
-
-  async getAnimalById({ animalId }) {
-    console.log(animalId);
-    const collection = this.db.collection("animals");
-    const results = await collection
-       .find({ _id: ObjectId(animalId) })
-       .toArray();
-    console.log(results);
-    return results[0];
-  }
-
-  async getAnimalsByLocationId({ locationId }) {
-     console.log(locationId);
-     const collection = this.db.collection("animals");
-     const results = await collection
-       .find({ locationId: ObjectId(locationId) })
-       .toArray();
-     console.log(results);
-     return results[0];
-   }
-
-   async getAnimalsByBreed({ breed }) {
-     console.log(breed);
-     const collection = this.db.collection("animals");
-     const results = await collection.find({ breed: breed }).toArray();
-     console.log(results);
-     return results[0];
-   }
-
-   async addNewAnimal({ animal }) {
-     animal = extractValidFields(animal, AnimalSchema);
-     const collection = this.db.collection("animals");
-     const result = await collection.insertOne(animal);
-     return result.insertedId;
- }
-
-  async updateAnimalInfo({}) {
-    const collection = this.db.collection("animals");
- }
+const { AnimalSchema, 
+				getAnimalsPage } = require("../models/animal");
 
 
-  getAnimalsByBreed({ breed }) {
-    return this.data.filter((animal) => animal.breed === breed);
-  }
+router.get("/", async (req, res) => {
+	try {
+		const animalPage = await getAllAnimals(parseInt(req.query.page) || 1);
+		animalPage.links = {};
+		if (animalPage.page < animalPage.totalPages) {
+			animalPage.links.nextPage = `/animals?page=${animalPage.page + 1}`;
+			animalPage.links.lastPage = `/animals?page=${animalPage.totalPages}`;
+		}
+		if (animalPage.page > 1) {
+			animalPage.links.prevPage = `/animals?page=${animalPage.page - 1}`;
+			animalPage.links.firstPage = `/animals?page=1`;
+		}
+		res.status(200).send(animalPage);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send({
+			error: "Error fetching businesses list. Please try again later."
+		});
+	}
+});
 
-  async deleteAnimalInfo({}) {
-   const collection = this.db.collection("animals");
- }
-}
-module.exports = AnimalsAPI;
+router.get("/:id", async (req, res) =>  {
+	return
+});
+
+router.get("/:location", async (req, res) => {
+	return
+});
+
+router.get("/:breed", async (req, res) => {
+	return
+});
+
+router.post("/", async (req, res) => {
+	return
+});
+
+router.put("/:id", async (req, res) => {
+	return
+});
+
+router.delete("/:id", async () => {
+	return
+});
+module.exports = router;
