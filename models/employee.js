@@ -21,7 +21,7 @@ exports.EmployeeSchema = EmployeeSchema;
 
 async function getEmployeesPage(page) {
   const db = getDbReference();
-  const collection = db.collection('locations');
+  const collection = db.collection('employees');
 
   const count = await collection.countDocuments();
   const pageSize = 10;
