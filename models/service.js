@@ -83,17 +83,22 @@ exports.getServiceById = getServiceById;
  * service.  If no service with the specified id exists, the returned Promise
  * will resolve to null.
  */
-async function updateServiceById(id, service) {
-  service = extractValidFields(service, ServiceSchema);
-	const db = getDbReference();
-  const collection = db.collection('services');
-  const results = await collection.replaceOne(
-    { _id: new ObjectId(id) },
-    service
-  );
-  return {};
-}
-exports.putService = putService;
+ async function updateServiceById(id, service){
+   const db = getDbReference();
+   const collection = db.collection('services');
+   if (!ObjectId.isValid(id)) {
+ 		return null;
+ 	}
+ 	const exists = await collection.find({ _id: new ObjectId(id) }).limit(1).count(true);
+
+   if (!exists) {
+ 		return null;
+ 	}
+ 	await collection.replaceOne({ _id: new ObjectId(id) }, service );
+ 	return {};
+
+ }
+exports.updateServiceById = updateServiceById;
 
 /*
  * Executes a DB query to delete a single specified service based on its id.
@@ -101,10 +106,17 @@ exports.putService = putService;
  *   If no service with the specified id exists, the returned Promise
  * will resolve to null.
  */
-async function deleteServiceById(id) {
-  const db = getDbReference();
-  const collection = db.collection('services');
-  const results = await collection.deleteOne({ _id: new ObjectId(id) });
-  return {};
-}
-exports.deleteService = deleteService;
+ async function deleteServiceById(id){
+   const db = getDbReference();
+   const collection = db.collection('services');
+   if (!ObjectId.isValid(id)) {
+ 		return null;
+ 	}
+ 	const exists = await collection.find({ _id: new ObjectId(id) }).limit(1).count(true);
+ 	if (!exists) {
+ 		return null;
+ 	}
+ 	await collection.deleteOne({ _id: new ObjectId(id) })
+ 	return {};
+ }
+exports.deleteServiceById = deleteServiceById;
