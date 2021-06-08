@@ -36,24 +36,7 @@ const upload = multer({
     filename: (req, file, callback) => {
       const filename = crypto.pseudoRandomBytes(16).toString("hex");
       const extension = acceptedFileTypes[file.mimetype];
-      callback(null, `${filename}-orig.${extension}`);
-    },
-  }),
-  fileFilter: (req, file, callback) => {
-    callback(null, !!acceptedFileTypes[file.mimetype]);
-  },
-});
-
-/*
- * Write images to disk. This is an intermediate step before we write them to GridFS.
- */
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: `${__dirname}/../uploads`,
-    filename: (req, file, callback) => {
-      const filename = crypto.pseudoRandomBytes(16).toString("hex");
-      const extension = acceptedFileTypes[file.mimetype];
-      callback(null, `${filename}-orig.${extension}`);
+      callback(null, `${filename}.${extension}`);
     },
   }),
   fileFilter: (req, file, callback) => {
@@ -70,7 +53,7 @@ router.post("/", upload.single("photo"), async (req, res, next) => {
       contentType: req.file.mimetype,
       filename: req.file.filename,
       path: req.file.path,
-      businessid: req.body.businessid,
+      animalId: req.body.animalId,
     };
     if (req.body.caption) {
       photo.caption = req.body.caption;
@@ -127,9 +110,6 @@ router.get("/:id", async (req, res, next) => {
         metadata: photo.metadata,
         urls: urls,
       };
-      if (photo.metadata.caption) {
-        resBody.caption = photo.metadata.caption;
-      }
       res.status(200).send(resBody);
     } else {
       next();
