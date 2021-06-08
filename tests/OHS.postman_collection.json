@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "82518f5d-bae5-4335-9cac-d05b934cb6db",
+		"_postman_id": "81b900ea-028a-4538-9dcd-693d75f63c01",
 		"name": "OHS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -196,7 +196,119 @@
 		},
 		{
 			"name": "Employees",
-			"item": []
+			"item": [
+				{
+					"name": "Get variants",
+					"item": [
+						{
+							"name": "Get a list of all employees.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/employees",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"employees"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get information about a specific employee.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/employees/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"employees",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a list of all services offered by an employee",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/employees/:id/services",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"employees",
+										":id",
+										"services"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Other requests",
+					"item": [
+						{
+							"name": "Login as an employee.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": null
+							},
+							"response": []
+						},
+						{
+							"name": "Create a new employee.",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/employees",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"employees"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete an employee from the DB.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": null
+							},
+							"response": []
+						}
+					]
+				}
+			]
 		},
 		{
 			"name": "Locations",
