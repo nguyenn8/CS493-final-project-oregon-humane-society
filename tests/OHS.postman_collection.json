@@ -321,7 +321,17 @@
 										"request": {
 											"method": "GET",
 											"header": [],
-											"url": null
+											"url": {
+												"raw": "http://localhost:8000/locations",
+												"protocol": "http",
+												"host": [
+													"localhost"
+												],
+												"port": "8000",
+												"path": [
+													"locations"
+												]
+											}
 										},
 										"response": []
 									},
@@ -330,7 +340,24 @@
 										"request": {
 											"method": "GET",
 											"header": [],
-											"url": null
+											"url": {
+												"raw": "http://localhost:8000/locations/:id",
+												"protocol": "http",
+												"host": [
+													"localhost"
+												],
+												"port": "8000",
+												"path": [
+													"locations",
+													":id"
+												],
+												"variable": [
+													{
+														"key": "id",
+														"value": "60bd4b8c171334f46ddf4560"
+													}
+												]
+											}
 										},
 										"response": []
 									}
@@ -431,7 +458,7 @@
 								]
 							}
 						]
-			},
+					},
 		{
 			"name": "Services",
 			"item": [
