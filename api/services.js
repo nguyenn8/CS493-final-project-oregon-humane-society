@@ -86,7 +86,7 @@ router.get('/:id', async (req, res, next) => {
  */
  router.put('/:id', async (req, res, next) => {
  const service = await getServiceById(req.params.id);
- if( (parseInt(req.params.id)) !==  (parseInt(service._id)) ){
+ if(req.params.id !== service._id){
    res.status(403).send({
      error: "Unauthorized to access the specified resource"
    });
@@ -97,7 +97,7 @@ router.get('/:id', async (req, res, next) => {
        if (updateSuccessful){
          res.status(200).send({
            links: {
-             service: `/services/${(parseInt(service._id))}`
+             service: `/services/${service._id}`
            }
          });
        }
@@ -124,7 +124,7 @@ router.get('/:id', async (req, res, next) => {
  */
  router.delete('/:id', async (req, res, next) => {
    const service = await getServiceById(req.params.id);
-  if((parseInt(req.params.id)) !==  (parseInt(service._id))){
+  if (req.params.id !==  service._id) {
     res.status(403).send({
       error: "Unauthorized to access the specified resource"
     });
