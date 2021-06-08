@@ -13,7 +13,7 @@ const { extractValidFields } = require("../lib/validation");
  * Schema describing required/optional fields of a photo object.
  */
 const PhotoSchema = {
-  businessid: { required: true },
+  animalId: { required: true },
   caption: { required: false },
 };
 exports.PhotoSchema = PhotoSchema;
@@ -101,11 +101,11 @@ async function getPhotoById(id) {
 exports.getPhotoById = getPhotoById;
 
 /*
- * Executes a DB query to fetch all photos for a specified business, based
- * on the business's ID.  Returns a Promise that resolves to an array
+ * Executes a DB query to fetch all photos for a specified animal, based
+ * on the animal's ID.  Returns a Promise that resolves to an array
  * containing the requested photos.  This array could be empty if the
- * specified business does not have any photos.  This function does not verify
- * that the specified business ID corresponds to a valid business.
+ * specified animal does not have any photos.  This function does not verify
+ * that the specified animal ID corresponds to a valid animal.
  */
 async function getPhotosByAnimalId(id) {
   const db = getDBReference();
