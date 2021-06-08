@@ -1,11 +1,14 @@
 version: '3.7'
 services:
+
   api:
-    build: .
+    build:
+      context: .
+      target: ohs-api
     image: ohs-api
     restart: always
-    ports:
-      - 8000:8000
+    #ports:
+    #  - 8000:8000
     environment:
       MONGO_DATABASE: ${MONGO_DATABASE}
       MONGO_USER: ${MONGO_USER}
@@ -29,6 +32,15 @@ services:
   redis-server:
     image: redis:latest
     restart: always
+
+  load-balancer:
+    build:
+      context: .
+      target: load-balancer
+    image: load-balancer
+    restart: always
+    ports:
+      - 8000:8000
 
 volumes:
   mongo-data:
