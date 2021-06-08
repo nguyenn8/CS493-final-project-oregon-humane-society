@@ -83,7 +83,7 @@ exports.getServiceById = getServiceById;
  * service.  If no service with the specified id exists, the returned Promise
  * will resolve to null.
  */
-async function putService(id, service) {
+async function updateServiceById(id, service) {
   service = extractValidFields(service, ServiceSchema);
 	const db = getDbReference();
   const collection = db.collection('services');
@@ -101,7 +101,7 @@ exports.putService = putService;
  *   If no service with the specified id exists, the returned Promise
  * will resolve to null.
  */
-async function deleteService(id) {
+async function deleteServiceById(id) {
   const db = getDbReference();
   const collection = db.collection('services');
   const results = await collection.deleteOne({ _id: new ObjectId(id) });
