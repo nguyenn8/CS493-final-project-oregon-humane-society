@@ -312,8 +312,153 @@
 		},
 		{
 			"name": "Locations",
-			"item": []
-		},
+			"item": [
+							{
+								"name": "Get variants",
+								"item": [
+									{
+										"name": "Get all locations",
+										"request": {
+											"method": "GET",
+											"header": [],
+											"url": {
+												"raw": "http://localhost:8000/locations",
+												"protocol": "http",
+												"host": [
+													"localhost"
+												],
+												"port": "8000",
+												"path": [
+													"locations"
+												]
+											}
+										},
+										"response": []
+									},
+									{
+										"name": "Get location by ID",
+										"request": {
+											"method": "GET",
+											"header": [],
+											"url": {
+												"raw": "http://localhost:8000/locations/:id",
+												"protocol": "http",
+												"host": [
+													"localhost"
+												],
+												"port": "8000",
+												"path": [
+													"locations",
+													":id"
+												],
+												"variable": [
+													{
+														"key": "id",
+														"value": "60bd4b8c171334f46ddf4560"
+													}
+												]
+											}
+										},
+										"response": []
+									}
+								]
+							},
+							{
+								"name": "Other requests",
+								"item": [
+									{
+										"name": "Update location by ID",
+										"request": {
+											"method": "PUT",
+											"header": [],
+											"body": {
+												"mode": "raw",
+												"raw": "{\n    \"name\": \"Portland\",\n    \"desc\": \"2335 NW Kings Blvd.\",\n    \"population\": \"70\",\n    \"capacity\": \"100\"\n}",
+												"options": {
+													"raw": {
+														"language": "json"
+													}
+												}
+											},
+											"url": {
+												"raw": "http://localhost:8000/locations/:id",
+												"protocol": "http",
+												"host": [
+													"localhost"
+												],
+												"port": "8000",
+												"path": [
+													"locations",
+													":id"
+												],
+												"variable": [
+													{
+														"key": "id",
+														"value": "60bd9a132106a42c9ff7243a"
+													}
+												]
+											}
+										},
+										"response": []
+									},
+									{
+										"name": "Delete location by ID",
+										"request": {
+											"method": "DELETE",
+											"header": [],
+											"url": {
+												"raw": "http://localhost:8000/locations/:id",
+												"protocol": "http",
+												"host": [
+													"localhost"
+												],
+												"port": "8000",
+												"path": [
+													"locations",
+													":id"
+												],
+												"variable": [
+													{
+														"key": "id",
+														"value": "60bdbf88e4bdc931d2ecb304"
+													}
+												]
+											}
+										},
+										"response": []
+									},
+									{
+										"name": "Insert new location",
+										"request": {
+											"method": "POST",
+											"header": [],
+											"body": {
+												"mode": "raw",
+												"raw": "{\n    \"name\": \"Salem\",\n    \"desc\": \"300 SW Jefferson Ave.\",\n    \"population\": \"35\",\n    \"capacity\": \"60\"\n}",
+												"options": {
+													"raw": {
+														"language": "json"
+													}
+												}
+											},
+											"url": {
+												"raw": "http://localhost:8000/locations",
+												"protocol": "http",
+												"host": [
+													"localhost"
+												],
+												"port": "8000",
+												"path": [
+													"locations"
+												]
+											}
+										},
+										"response": []
+									}
+								]
+							}
+						]
+					},
 		{
 			"name": "Services",
 			"item": [
