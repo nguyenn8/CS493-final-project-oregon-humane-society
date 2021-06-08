@@ -2,7 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 
 
-const { connectToDb, getDbReference } = require('./lib/mongo');
+const { connectToDb, getDbReference } = require("./lib/mongo");
+const { rateLimit } = require("./lib/redis")
 const api = require("./api");
 
 const app = express();
@@ -15,6 +16,13 @@ app.use(morgan("dev"));
 
 app.use(express.json());
 app.use(express.static("public"));
+
+
+/*
+ * Allow rate limiting to intercept all requests before proceeding to endpoints.
+ */
+app.use(rateLimit);
+
 
 /*
  * All routes for the API are written in modules in the api/ directory.  The
