@@ -55,6 +55,7 @@ exports.insertNewEmployee = async function (employee) {
   const db = getDbReference();
   const collection = db.collection("employees");
   const employeeToInsert = extractValidFields(employee, EmployeeSchema);
+  employeeToInsert.admin = 0;
   console.log("  -- employeeToInsert before hashing:", employeeToInsert);
   employeeToInsert.password = await bcrypt.hash(employeeToInsert.password, 8);
   console.log("  -- employeeToInsert after hashing:", employeeToInsert);

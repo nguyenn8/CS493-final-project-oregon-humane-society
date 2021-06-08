@@ -1,12 +1,10 @@
 const router = require("express").Router();
-const { getDbReference } = require("../lib/mongo");
-const { ObjectId } = require("mongodb");
-
-const { validateUser } = require("../lib/validation");
+const { validateAgainstSchema } = require("../lib/validation");
 const { insertNewEmployee } = require("../models/employee");
 const { generateAuthToken, requireAuthentication } = require("../lib/auth");
 const {
   EmployeeSchema,
+  validateEmployee,
   getEmployeesPage,
   getEmployeeById,
   deleteEmployee,
@@ -34,7 +32,7 @@ router.get("/", requireAuthentication, async (req, res) => {
  */
 
 router.post("/", async (req, res, next) => {
-  if (validateAgainstSchema(req.body, UserSchema)) {
+  if (validateAgainstSchema(req.body, EmployeeSchema)) {
     try {
       const id = await insertNewEmployee(req.body);
       res.status(201).send({
@@ -99,7 +97,10 @@ If a user attempts to log in with an invalid username or password, you should re
 router.post("/login", async (req, res, next) => {
   if (req.body && req.body.id && req.body.password) {
     try {
-      const authenticated = await validateUser(req.body.id, req.body.password);
+      const authenticated = await validateEmployee(
+        req.body.id,
+        req.body.password
+      );
       if (authenticated) {
         res.status(200).send({
           token: generateAuthToken(req.body.id),
