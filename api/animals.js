@@ -17,6 +17,7 @@ const {
   updateAnimal,
   deleteAnimalById,
 } = require("../models/animal");
+const { getPhotosByAnimalId } = require("../models/photo");
 const { requireAuthentication } = require("../lib/auth");
 
 /*
@@ -49,6 +50,13 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const animal = await getAnimalById(req.params.id);
+    const photos = await getPhotosByAnimalId(req.params.id);
+    const baseUrl = "/photos/"
+		var photoUrls = [];
+		for (var i = 0; i < photos.length; i++) {
+			photoUrls.push(baseUrl + photos[i]._id);
+		}
+		animal.photos = photoUrls;
     if (animal) {
       res.status(200).send(animal);
     } else {
