@@ -25,6 +25,7 @@ async function insertNewService(service) {
   return result.insertedId;
 }
 exports.insertNewService = insertNewService;
+
 /*
  * Get all services from DB
  */
@@ -32,7 +33,8 @@ exports.insertNewService = insertNewService;
  	const db = getDbReference();
  	const collection = db.collection("services");
  	const count = await collection.countDocuments();
- 	/*
+
+  /*
  	 * Compute last page number and make sure page is within bounds.
  	 * Compute offset into collection
  	 */
@@ -58,6 +60,7 @@ exports.insertNewService = insertNewService;
  	};
  }
  exports.getServicesPage = getServicesPage;
+
 /*
  * Executes a DB query to fetch a single specified service based on its name.
  * Returns a Promise that resolves to an object containing the requested
@@ -77,6 +80,7 @@ async function getServiceById(id) {
   }
 }
 exports.getServiceById = getServiceById;
+
 /*
  * Executes a DB query to update a single specified service based on its id.
  * Returns a Promise that resolves to an object containing the updated

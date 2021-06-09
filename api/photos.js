@@ -47,14 +47,8 @@ const upload = multer({
 /*
  * Route to create a new photo.
  */
-router.post(
-  "/",
-  requireAuthentication,
-  upload.single("photo"),
-  async (req, res, next) => {
-    console.log("Posting...");
+router.post("/", requireAuthentication, upload.single("photo"), async (req, res, next) => {
     if (validateAgainstSchema(req.body, PhotoSchema) && req.file) {
-      console.log("validated photos");
       photo = {
         contentType: req.file.mimetype,
         filename: req.file.filename,
@@ -65,9 +59,7 @@ router.post(
         photo.caption = req.body.caption;
       }
       try {
-        console.log("attempting to insert");
         const id = await insertNewPhoto(photo);
-        //await fs.unlink(req.file.path);
         res.status(200).send({
           id: id,
         });
@@ -102,12 +94,6 @@ router.get("/:id", async (req, res, next) => {
         })
         .pipe(res);
       return;
-      // const resBody = {
-      //   _id: photo._id,
-      //   filename: photo.filename,
-      //   metadata: photo.metadata,
-      // };
-      // res.status(200).send(resBody);
     } else {
       next();
     }

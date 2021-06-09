@@ -20,7 +20,6 @@ const {
 router.get("/", async (req, res) => {
   try {
     const locationsPage = await getLocationsPage(parseInt(req.query.page) || 1);
-    console.log("---locationsPage", locationsPage);
     res.status(200).send(locationsPage);
   } catch (err) {
     console.error("  -- error:", err);
@@ -34,7 +33,6 @@ router.get("/", async (req, res) => {
  * Route to create a new location if administrator
  */
 router.post("/", requireAuthentication, async (req, res, next) => {
-  console.log("  -- req.body:", req.body);
   if (validateAgainstSchema(req.body, LocationSchema)) {
     try {
       const id = await insertNewLocation(req.body);
@@ -78,9 +76,7 @@ router.get("/:id", async (req, res, next) => {
  * Update information about a specific location if administrator
  */
 router.put("/:id", requireAuthentication, async (req, res, next) => {
-  console.log("req.params.id", req.params.id);
   const location = await getLocationById(req.params.id);
-  console.log("location._id", location._id);
   if (parseInt(req.params.id) !== parseInt(location._id)) {
     res.status(403).send({
       error: "Unauthorized to access the specified resource",
@@ -120,7 +116,6 @@ router.put("/:id", requireAuthentication, async (req, res, next) => {
  * Delete a location from the shelter database
  */
 router.delete("/:id", requireAuthentication, async (req, res, next) => {
-  console.log("req.params.id", req.params.id);
   const location = await getLocationById(req.params.id);
   if (parseInt(req.params.id) !== parseInt(location._id)) {
     res.status(403).send({

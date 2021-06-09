@@ -17,7 +17,6 @@ const {
 router.get("/", requireAuthentication, async (req, res) => {
   try {
     const employeesPage = await getEmployeesPage(parseInt(req.query.page) || 1);
-    console.log("---locationsPage", employeesPage);
     res.status(200).send(employeesPage);
   } catch (err) {
     console.error("  -- error:", err);
@@ -90,10 +89,10 @@ router.get("/:id/services", async (req, res, next) => {
   }
 });
 
-/* Once you have enabled user registration for your application, implement a new POST /users/login API endpoint that allows a registered user to log in by sending their email address and password. If the email/password combination is valid, you should respond with a JWT token, which the user can then send with future requests to authenticate themselves. The JWT token payload should contain the user's ID (with which you should be able to fetch details about the user from the database) and any other information needed to implement the features described in this assignment, and it should expire after 24 hours.
 
-If a user attempts to log in with an invalid username or password, you should respond with a 401 error. */
-
+/*
+ * Endpoint for logging in as user.
+ */
 router.post("/login", async (req, res, next) => {
   if (req.body && req.body.username && req.body.password) {
     try {

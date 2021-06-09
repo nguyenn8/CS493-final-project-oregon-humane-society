@@ -16,7 +16,9 @@ LocationSchema = {
 };
 exports.LocationSchema = LocationSchema
 
-
+/*
+ * Get a page of locations.
+ */
 async function getLocationsPage(page) {
   const db = getDbReference();
   const collection = db.collection('locations');
@@ -44,7 +46,9 @@ async function getLocationsPage(page) {
 }
 exports.getLocationsPage = getLocationsPage;
 
-
+/*
+ * Create a new location.
+ */
 async function insertNewLocation(location) {
   location = extractValidFields(location, LocationSchema);
   const db = getDbReference();
@@ -55,6 +59,9 @@ async function insertNewLocation(location) {
 }
 exports.insertNewLocation = insertNewLocation;
 
+/*
+ * Get a location by ID.
+ */
 async function getLocationById(id){
   const db = getDbReference();
   const collection = db.collection('locations');
@@ -69,7 +76,9 @@ async function getLocationById(id){
 }
 exports.getLocationById = getLocationById;
 
-
+/*
+ * Update a location by ID.
+ */
 async function replaceLocationById(id, location){
   const db = getDbReference();
   const collection = db.collection('locations');
@@ -87,6 +96,9 @@ async function replaceLocationById(id, location){
 }
 exports.replaceLocationById = replaceLocationById;
 
+/*
+ * Delete a location by ID.
+ */
 async function deleteLocationById(id){
   const db = getDbReference();
   const collection = db.collection('locations');

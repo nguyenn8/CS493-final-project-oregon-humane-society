@@ -13,7 +13,6 @@ const { getDbReference } = require("../lib/mongo");
  */
 
 const EmployeeSchema = {
-  //id: { required: true },
   username: { required: true },
   password: { required: true },
   date_hired: { required: true },
@@ -56,23 +55,26 @@ exports.insertNewEmployee = async function (employee) {
   const collection = db.collection("employees");
   const employeeToInsert = extractValidFields(employee, EmployeeSchema);
   employeeToInsert.admin = 0;
-  console.log("  -- employeeToInsert before hashing:", employeeToInsert);
   employeeToInsert.password = await bcrypt.hash(employeeToInsert.password, 8);
-  console.log("  -- employeeToInsert after hashing:", employeeToInsert);
   const result = await collection.insertOne(employeeToInsert);
   console.log(result);
   return result.insertedId;
 };
 
+/*
+ * Validate that the provided password matches the stored password for the
+ * given username.
+ */
 exports.validateEmployee = async function (username, password) {
   const db = getDbReference();
   const collection = db.collection("employees");
-  console.log(username, password);
   const employee = await getEmployeeByUsername(username);
-  console.log(employee);
   return employee && (await bcrypt.compare(password, employee.password));
 };
 
+/*
+ * Fetch an employee from the DB based on employee username.
+ */
 async function getEmployeeByUsername(username) {
   const db = getDbReference();
   const collection = db.collection("employees");
@@ -84,7 +86,6 @@ exports.getEmployeeByUsername = getEmployeeByUsername;
 /*
  * Fetch an employee from the DB based on employee ID.
  */
-
 async function getEmployeeById(id) {
   const db = getDbReference();
   const collection = db.collection("employees");
@@ -97,6 +98,9 @@ async function getEmployeeById(id) {
 }
 exports.getEmployeeById = getEmployeeById;
 
+/*
+ * Retrieve all employees from database.
+ */
 exports.getAllEmployees = async function () {
   const db = getDbReference();
   const collection = db.collection("employees");
@@ -104,6 +108,9 @@ exports.getAllEmployees = async function () {
   return results;
 };
 
+/*
+ * Get services that an employee performs.
+ */
 exports.getEmployeeServicesById = async function (employeeId) {
   const db = getDbReference();
   const collection = db.collection("services");

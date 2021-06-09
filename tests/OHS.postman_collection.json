@@ -547,7 +547,7 @@
 									"type": "text"
 								},
 								{
-									"key": "photo\n",
+									"key": "photo",
 									"type": "file",
 									"src": []
 								}
