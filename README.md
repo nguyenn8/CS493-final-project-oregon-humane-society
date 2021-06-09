@@ -36,6 +36,11 @@ Here's an overview of the routes offered in this API.
 - `PUT /locations/:id` - update information about a specific location if administrator
 - `DELETE /locations/:id` - delete a location from the shelter database
 
+### Photos
+
+- `GET /photos/:id` - get a specific photo
+- `POST /photos` - if employee is authenticated, post photo for specified animal
+
 ### Services
 
 - `GET /services` - get information about all services
