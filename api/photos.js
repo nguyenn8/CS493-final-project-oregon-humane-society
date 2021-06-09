@@ -2,6 +2,7 @@
  * API sub-router for businesses collection endpoints.
  */
 
+const { requireAuthentication } = require("../lib/auth");
 const router = require("express").Router();
 const multer = require("multer");
 const crypto = require("crypto");
@@ -15,9 +16,8 @@ const {
   PhotoSchema,
   insertNewPhoto,
   getPhotoById,
+  getPhotoStreamById,
 } = require("../models/photo");
-
-const { getChannel } = require("../lib/rabbitmq");
 
 /*
  * Excepted file formats.
@@ -47,34 +47,40 @@ const upload = multer({
 /*
  * Route to create a new photo.
  */
-router.post("/", upload.single("photo"), async (req, res, next) => {
-  if (validateAgainstSchema(req.body, PhotoSchema) && req.file) {
-    photo = {
-      contentType: req.file.mimetype,
-      filename: req.file.filename,
-      path: req.file.path,
-      animalId: req.body.animalId,
-    };
-    if (req.body.caption) {
-      photo.caption = req.body.caption;
-    }
-    try {
-      const id = await insertNewPhoto(photo);
-      //await fs.unlink(req.file.path);
-      res.status(200).send({
-        id: id,
+router.post(
+  "/",
+  requireAuthentication,
+  upload.single("photo"),
+  async (req, res, next) => {
+    console.log("Posting...");
+    if (validateAgainstSchema(req.body, PhotoSchema) && req.file) {
+      console.log("validated photos");
+      photo = {
+        contentType: req.file.mimetype,
+        filename: req.file.filename,
+        path: req.file.path,
+        animalId: req.body.animalId,
+      };
+      if (req.body.caption) {
+        photo.caption = req.body.caption;
+      }
+      try {
+        console.log("attempting to insert");
+        const id = await insertNewPhoto(photo);
+        //await fs.unlink(req.file.path);
+        res.status(200).send({
+          id: id,
+        });
+      } catch (err) {
+        next(err);
+      }
+    } else {
+      res.status(400).send({
+        error: "Request body is not a valid photo object",
       });
-      const channel = getChannel();
-      channel.sendToQueue("photos", Buffer.from(id.toString()));
-    } catch (err) {
-      next(err);
     }
-  } else {
-    res.status(400).send({
-      error: "Request body is not a valid photo object",
-    });
   }
-});
+);
 
 /*
  * Route to fetch info about a specific photo.
@@ -83,34 +89,25 @@ router.get("/:id", async (req, res, next) => {
   try {
     const photo = await getPhotoById(req.params.id);
     if (photo) {
-      base = "/media/photos/" + photo._id + "-";
-      urls = {};
-      if (photo.metadata.resolutions["1024"]) {
-        s = base + "1024.jpg";
-        urls["1024"] = s;
-      }
-      if (photo.metadata.resolutions["640"]) {
-        s = base + "640.jpg";
-        urls["640"] = s;
-      }
-      if (photo.metadata.resolutions["256"]) {
-        s = base + "256.jpg";
-        urls["256"] = s;
-      }
-      if (photo.metadata.resolutions["128"]) {
-        s = base + "128.jpg";
-        urls["128"] = s;
-      }
-      s = base + "orig." + acceptedFileTypes[photo.metadata.contentType];
-      urls.orig = s;
-
-      const resBody = {
-        _id: photo._id,
-        filename: photo.filename,
-        metadata: photo.metadata,
-        urls: urls,
-      };
-      res.status(200).send(resBody);
+      getPhotoStreamById(req.params.id)
+        .on("error", (err) => {
+          if (err.code === "ENOENT") {
+            next();
+          } else {
+            next(err);
+          }
+        })
+        .on("file", (file) => {
+          res.status(200).type(file.metadata.contentType);
+        })
+        .pipe(res);
+      return;
+      // const resBody = {
+      //   _id: photo._id,
+      //   filename: photo.filename,
+      //   metadata: photo.metadata,
+      // };
+      // res.status(200).send(resBody);
     } else {
       next();
     }

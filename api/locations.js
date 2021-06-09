@@ -2,8 +2,8 @@ const router = require("express").Router();
 const { getDbReference } = require("../lib/mongo");
 const { ObjectId } = require("mongodb");
 const { validateUser } = require("../lib/validation");
-const { requireAuthentication } = require('../lib/auth');
-const { validateAgainstSchema } = require('../lib/validation');
+const { requireAuthentication } = require("../lib/auth");
+const { validateAgainstSchema } = require("../lib/validation");
 
 const {
   LocationSchema,
@@ -11,13 +11,13 @@ const {
   insertNewLocation,
   replaceLocationById,
   deleteLocationById,
-  getLocationById
-} = require('../models/location');
+  getLocationById,
+} = require("../models/location");
 
 /*
  * Route to get information about all locations.
  */
- router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const locationsPage = await getLocationsPage(parseInt(req.query.page) || 1);
     console.log("---locationsPage", locationsPage);
@@ -25,7 +25,7 @@ const {
   } catch (err) {
     console.error("  -- error:", err);
     res.status(500).send({
-      err: "Error fetching locations page from DB.  Try again later."
+      err: "Error fetching locations page from DB.  Try again later.",
     });
   }
 });
@@ -33,7 +33,7 @@ const {
 /*
  * Route to create a new location if administrator
  */
-router.post("/", async (req, res, next) => {
+router.post("/", requireAuthentication, async (req, res, next) => {
   console.log("  -- req.body:", req.body);
   if (validateAgainstSchema(req.body, LocationSchema)) {
     try {
@@ -54,77 +54,77 @@ router.post("/", async (req, res, next) => {
   }
 });
 
- /*
+/*
  * Route to fetch info about a specific location including adoptable animals in this location
  */
- router.get('/:id', async (req, res, next) => {
-   try {
-     const location = await getLocationById(req.params.id);
-     if (location) {
-       res.status(200).send(location);
-     } else {
-       next();
-     }
-   } catch (err) {
-     console.error(err);
-     res.status(500).send({
-       error: "Unable to fetch location.  Please try again later."
-     });
-   }
- });
+router.get("/:id", async (req, res, next) => {
+  try {
+    const location = await getLocationById(req.params.id);
+    if (location) {
+      res.status(200).send(location);
+    } else {
+      next();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      error: "Unable to fetch location.  Please try again later.",
+    });
+  }
+});
 
- /*
+/*
  * Route to update a location.
  * Update information about a specific location if administrator
  */
- router.put('/:id', async (req, res, next) => {
- console.log("req.params.id", req.params.id);
- const location = await getLocationById(req.params.id);
- console.log("location._id", location._id);
- if( (parseInt(req.params.id)) !==  (parseInt(location._id)) ){
-   res.status(403).send({
-     error: "Unauthorized to access the specified resource"
-   });
- } else {
-   if (validateAgainstSchema(req.body, LocationSchema)) {
-     try {
-       const updateSuccessful = await replaceLocationById(req.params.id, req.body);
-       if (updateSuccessful){
-         res.status(200).send({
-           links: {
-             location: `/photos/${(parseInt(location._id))}`
-           }
-         });
-       }
-       else {
-         next();
-       }
-     } catch (err) {
-       console.error(err);
-       res.status(500).send({
-        error: "Unable to update photo.  Please try again later."
+router.put("/:id", requireAuthentication, async (req, res, next) => {
+  console.log("req.params.id", req.params.id);
+  const location = await getLocationById(req.params.id);
+  console.log("location._id", location._id);
+  if (parseInt(req.params.id) !== parseInt(location._id)) {
+    res.status(403).send({
+      error: "Unauthorized to access the specified resource",
+    });
+  } else {
+    if (validateAgainstSchema(req.body, LocationSchema)) {
+      try {
+        const updateSuccessful = await replaceLocationById(
+          req.params.id,
+          req.body
+        );
+        if (updateSuccessful) {
+          res.status(200).send({
+            links: {
+              location: `/photos/${parseInt(location._id)}`,
+            },
+          });
+        } else {
+          next();
+        }
+      } catch (err) {
+        console.error(err);
+        res.status(500).send({
+          error: "Unable to update photo.  Please try again later.",
+        });
+      }
+    } else {
+      res.status(400).send({
+        error: "Request body is not a valid location object.",
       });
-     }
-   }
-    else {
-     res.status(400).send({
-       error: "Request body is not a valid location object."
-     });
-   }
- }
- });
+    }
+  }
+});
 
-
- /*
+/*
  * Route to delete a location.
  * Delete a location from the shelter database
  */
- router.delete('/:id', async (req, res, next) => {
-   console.log("req.params.id", req.params.id);
-   const location = await getLocationById(req.params.id);
-  if((parseInt(req.params.id)) !==  (parseInt(location._id))){
+router.delete("/:id", requireAuthentication, async (req, res, next) => {
+  console.log("req.params.id", req.params.id);
+  const location = await getLocationById(req.params.id);
+  if (parseInt(req.params.id) !== parseInt(location._id)) {
     res.status(403).send({
-      error: "Unauthorized to access the specified resource"
+      error: "Unauthorized to access the specified resource",
     });
   } else {
     try {
@@ -137,7 +137,7 @@ router.post("/", async (req, res, next) => {
     } catch (err) {
       console.error(err);
       res.status(500).send({
-        error: "Unable to delete location.  Please try again later."
+        error: "Unable to delete location.  Please try again later.",
       });
     }
   }

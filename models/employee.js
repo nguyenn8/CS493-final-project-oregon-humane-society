@@ -59,15 +59,33 @@ exports.insertNewEmployee = async function (employee) {
   console.log("  -- employeeToInsert before hashing:", employeeToInsert);
   employeeToInsert.password = await bcrypt.hash(employeeToInsert.password, 8);
   console.log("  -- employeeToInsert after hashing:", employeeToInsert);
-  const result = await collection.insertOne(employee);
-  return result.insertId;
+  const result = await collection.insertOne(employeeToInsert);
+  console.log(result);
+  return result.insertedId;
 };
+
+exports.validateEmployee = async function (username, password) {
+  const db = getDbReference();
+  const collection = db.collection("employees");
+  console.log(username, password);
+  const employee = await getEmployeeByUsername(username);
+  console.log(employee);
+  return employee && (await bcrypt.compare(password, employee.password));
+};
+
+async function getEmployeeByUsername(username) {
+  const db = getDbReference();
+  const collection = db.collection("employees");
+  const results = await collection.find({ username: username }).toArray();
+  return results[0];
+}
+exports.getEmployeeByUsername = getEmployeeByUsername;
 
 /*
  * Fetch an employee from the DB based on employee ID.
  */
 
-exports.getEmployeeById = async function (id) {
+async function getEmployeeById(id) {
   const db = getDbReference();
   const collection = db.collection("employees");
   if (!ObjectId.isValid(id)) {
@@ -76,32 +94,14 @@ exports.getEmployeeById = async function (id) {
     const results = await collection.find({ _id: new ObjectId(id) }).toArray();
     return results[0];
   }
-};
-
-exports.validateEmployee = async function (id, password) {
-  const db = getDbReference();
-  const collection = db.collection("employees");
-  console.log(id, password);
-  const employee = await getEmployeeById(id);
-  console.log(employee);
-  return user && (await bcrypt.compare(password, employee.password));
-};
+}
+exports.getEmployeeById = getEmployeeById;
 
 exports.getAllEmployees = async function () {
   const db = getDbReference();
   const collection = db.collection("employees");
   const results = await collection.find({}).toArray();
   return results;
-};
-
-exports.getEmployeeById = async function (employeeId) {
-  const db = getDbReference();
-  const collection = db.collection("employees");
-  const results = await collection
-    .find({ _id: ObjectId(employeeId) })
-    .toArray();
-  console.log(results);
-  return results[0];
 };
 
 exports.getEmployeeServicesById = async function (employeeId) {

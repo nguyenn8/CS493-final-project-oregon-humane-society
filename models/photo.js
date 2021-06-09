@@ -6,7 +6,7 @@ const fs = require("fs");
 const crypto = require("crypto");
 const { ObjectId, GridFSBucket } = require("mongodb");
 
-const { getDBReference } = require("../lib/mongo");
+const { getDbReference } = require("../lib/mongo");
 const { extractValidFields } = require("../lib/validation");
 
 /*
@@ -24,11 +24,11 @@ exports.PhotoSchema = PhotoSchema;
  */
 async function insertNewPhoto(photo) {
   return new Promise((resolve, reject) => {
-    const db = getDBReference();
+    const db = getDbReference();
     const bucket = new GridFSBucket(db, { bucketName: "photos" });
     const metadata = {
       contentType: photo.contentType,
-      businessid: photo.businessid,
+      animalId: photo.animalId,
     };
     if (photo.caption) {
       metadata.caption = photo.caption;
@@ -55,7 +55,7 @@ exports.insertNewPhoto = insertNewPhoto;
  */
 async function insertResizedPhoto(photoBuffer) {
   return new Promise((resolve, reject) => {
-    const db = getDBReference();
+    const db = getDbReference();
     const bucket = new GridFSBucket(db, { bucketName: "photos" });
     const uploadStream = bucket.openUploadStream(
       crypto.pseudoRandomBytes(16).toString("hex")
@@ -71,7 +71,7 @@ exports.insertResizedPhoto = insertResizedPhoto;
  * its ID. Returns a stream with the photo data.
  */
 function getPhotoStreamById(id) {
-  const db = getDBReference();
+  const db = getDbReference();
   const bucket = new GridFSBucket(db, { bucketName: "photos" });
   if (!ObjectId.isValid(id)) {
     return null;
@@ -88,7 +88,7 @@ exports.getPhotoStreamById = getPhotoStreamById;
  * will resolve to null.
  */
 async function getPhotoById(id) {
-  const db = getDBReference();
+  const db = getDbReference();
   const bucket = new GridFSBucket(db, { bucketName: "photos" });
 
   if (!ObjectId.isValid(id)) {
@@ -108,10 +108,10 @@ exports.getPhotoById = getPhotoById;
  * that the specified animal ID corresponds to a valid animal.
  */
 async function getPhotosByAnimalId(id) {
-  const db = getDBReference();
+  const db = getDbReference();
   const bucket = new GridFSBucket(db, { bucketName: "photos" });
 
   const results = await bucket.find({ "metadata.animalId": id }).toArray();
   return results;
 }
-exports.getPhotosByBusinessId = getPhotosByBusinessId;
+exports.getPhotosByAnimalId = getPhotosByAnimalId;

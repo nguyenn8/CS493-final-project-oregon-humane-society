@@ -95,10 +95,10 @@ router.get("/:id/services", async (req, res, next) => {
 If a user attempts to log in with an invalid username or password, you should respond with a 401 error. */
 
 router.post("/login", async (req, res, next) => {
-  if (req.body && req.body.id && req.body.password) {
+  if (req.body && req.body.username && req.body.password) {
     try {
       const authenticated = await validateEmployee(
-        req.body.id,
+        req.body.username,
         req.body.password
       );
       if (authenticated) {
