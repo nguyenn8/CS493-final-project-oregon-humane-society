@@ -46,4 +46,6 @@ Here's an overview of the routes offered in this API.
 
 ## Building the API
 
-We have provided a Dockerfile and Docker Compose set up so that you can run the API server and database with ease.
+We have provided a Dockerfile and Docker Compose set up so that you can run the API server and database with ease. You can run the server with the following command:
+
+`docker-compose up --build --scale api=3`
